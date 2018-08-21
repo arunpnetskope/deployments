@@ -1,0 +1,14 @@
+namespace: preprod
+name: betaskope
+version: '1.0'
+description: template for testing
+maintainer: arun.p@netskope.com
+images:
+    stable-image: localhost:5000/preprod
+config:
+    image: localhost:5000/preprod
+    steps:
+        - execute-job: cat /infrastructure/vaultpass | sudo -S su - ansible -c "/opt/ns/automation-$VERSION/automation/scripts/ansible-apt.sh -h $COMPONENT -i /opt/ns/automation-$VERSION/automation/inventory/betaskope.local -r $VERSION"
+    environment: 
+        VERSION: 53.0.0
+        COMPONENT: bstest
