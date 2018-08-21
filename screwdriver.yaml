@@ -1,0 +1,19 @@
+shared:
+    image: localhost:5000/customapp
+jobs:
+    main:
+        requires: [~pr, ~commit]
+        steps:
+            - install: npm install screwdriver-template-main
+            - validate: ./node_modules/.bin/template-validate
+        environment:
+            SD_TEMPLATE_PATH: /deployments/pipelines/sdtemplates/betaskopesdtemplate.yaml
+    publish:
+        requires: [main]
+        steps:
+            - install: npm install screwdriver-template-main
+            - publish: ./node_modules/.bin/template-publish
+            - autotag: ./node_modules/.bin/template-tag --name preprod/betaskope --tag latest
+            - tag: ./node_modules/.bin/template-tag --name preprod/betaskope --version 1.0.0 --tag latest
+        environment:
+            SD_TEMPLATE_PATH: /deployments/pipelines/sdtemplates/betaskopesdtemplate.yaml
